@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - Sneaker Mania</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fafafa;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 1000;
+            padding: 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #000;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #666;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link:hover {
+            color: #000;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-icon {
+            font-size: 1.1rem;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-icon:hover {
+            color: #000;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b35;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Product Detail Section */
+        .product-detail {
+            padding: 120px 2rem 80px;
+            background: white;
+        }
+
+        .detail-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .product-images {
+            position: sticky;
+            top: 120px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 60px;
+            background: #f8f8f8;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .main-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .product-shoe {
+            width: 400px;
+            height: 300px;
+            border-radius: 60px 20px 60px 20px;
+            position: relative;
+            transform: rotate(-10deg);
+            transition: transform 0.3s ease;
+            display: none; /* Hide CSS shapes when images are used */
+        }
+
+        .product-shoe img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 60px 20px 60px 20px;
+            transform: rotate(-10deg);
+            transition: all 0.3s ease;
+            opacity: 1;
+            display: block; /* Ensure image is visible by default */
+        }
+
+        .product-shoe img.fade-out {
+            opacity: 0;
+        }
+
+        .product-shoe img.fade-in {
+            opacity: 1;
+        }
+
+        .product-shoe:hover {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .product-shoe:hover img {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .shoe-white { background: linear-gradient(135deg, #f8f8f8 0%, #e8e8e8 100%); }
+        .shoe-black { background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%); }
+        .shoe-pink { background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%); }
+        .shoe-blue { background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%); }
+
+        .thumbnail-images {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            background: #f8f8f8;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .thumbnail:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .thumbnail.active {
+            border-color: #ff6b35;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .thumbnail:hover img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 2rem 0;
+        }
+
+        .product-category {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #000;
+            letter-spacing: -1px;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #000;
+            margin-bottom: 2rem;
+        }
+
+        .product-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .size-selection {
+            margin-bottom: 2rem;
+        }
+
+        .size-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #000;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .size-option {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .size-option:hover {
+            border-color: #ff6b35;
+        }
+
+        .size-option.selected {
+            background: #ff6b35;
+            color: white;
+            border-color: #ff6b35;
+        }
+
+        .quantity-selection {
+            margin-bottom: 2rem;
+        }
+
+        .quantity-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #000;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            border-color: #ff6b35;
+            color: #ff6b35;
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #000;
+            color: white;
+            flex: 2;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #ff6b35;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+        }
+
+        .product-features {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .features-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #000;
+        }
+
+        .features-list {
+            list-style: none;
+        }
+
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #666;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .features-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #ff6b35;
+            font-weight: 700;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .cart-modal.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .cart-items {
+            padding: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .cart-item-price {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-quantity-btn {
+            width: 25px;
+            height: 25px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .cart-total {
+            padding: 2rem;
+            border-top: 1px solid #e0e0e0;
+            background: #f8f8f8;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .total-amount {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #333;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        /* Back to Home Button */
+        .back-home {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: #000;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-home:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .detail-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .product-title {
+                font-size: 2rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .cart-modal {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+        }
+
+        /* Image Zoom Modal */
+        .zoom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .zoom-modal.active {
+            display: flex;
+        }
+
+        .zoom-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 20px;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .zoom-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 3001;
+        }
+
+        /* Ensure main image container is properly sized */
+        .main-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">SNEAKER MANIA</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#products" class="nav-link">Products</a></li>
+                <li><a href="index.html#collection" class="nav-link">Collection</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-icons">
+                <i class="fas fa-search nav-icon"></i>
+                <i class="fas fa-shopping-bag nav-icon" id="cart-icon">
+                    <span class="cart-count" id="cart-count">0</span>
+                </i>
+                <i class="fas fa-bars nav-icon"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail">
+        <div class="detail-container">
+            <div class="product-images">
+                <div class="main-image">
+                    <div class="product-shoe shoe-white" id="main-shoe">
+                        <img src="images/air-max-sneaker.jpg" alt="Product Image" id="main-product-image" onerror="this.style.display='none'; this.parentElement.style.display='block';">
+                    </div>
+                </div>
+                <div class="thumbnail-images">
+                    <div class="thumbnail active" data-color="white" data-image="images/white-sneaker.jpg">
+                        <img src="images/white-sneaker.jpg" alt="White">
+                    </div>
+                    <div class="thumbnail" data-color="black" data-image="images/black-sneaker.jpg">
+                        <img src="images/black-sneaker.jpg" alt="Black">
+                    </div>
+                    <div class="thumbnail" data-color="pink" data-image="images/pink-sneaker.jpg">
+                        <img src="images/pink-sneaker.jpg" alt="Pink">
+                    </div>
+                    <div class="thumbnail" data-color="blue" data-image="images/blue-sneaker.jpg">
+                        <img src="images/blue-sneaker.jpg" alt="Blue">
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-info">
+                <div class="product-category" id="product-category">Classic</div>
+                <h1 class="product-title" id="product-title">White Sneaker</h1>
+                <div class="product-price" id="product-price">₹3,999</div>
+                <p class="product-description">
+                    Experience ultimate comfort and style with our premium sneaker. Crafted with high-quality materials and innovative design, this sneaker offers perfect fit and exceptional durability for everyday wear.
+                </p>
+
+                <div class="size-selection">
+                    <div class="size-title">Select Size</div>
+                    <div class="size-options">
+                        <div class="size-option" data-size="7">7</div>
+                        <div class="size-option" data-size="8">8</div>
+                        <div class="size-option" data-size="9">9</div>
+                        <div class="size-option" data-size="10">10</div>
+                        <div class="size-option" data-size="11">11</div>
+                        <div class="size-option" data-size="12">12</div>
+                    </div>
+                </div>
+
+                <div class="quantity-selection">
+                    <div class="quantity-title">Quantity</div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" id="decrease-qty">-</button>
+                        <input type="number" class="quantity-input" id="quantity-input" value="1" min="1" max="10">
+                        <button class="quantity-btn" id="increase-qty">+</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="add-to-cart">Add to Cart</button>
+                    <button class="btn btn-secondary" id="buy-now">Buy Now</button>
+                    <button class="btn btn-secondary" id="test-image" style="background: #ff6b35; margin-top: 1rem;">Test Image Loading</button>
+                </div>
+
+                <div class="product-features">
+                    <h3 class="features-title">Features</h3>
+                    <ul class="features-list">
+                        <li>Premium quality materials</li>
+                        <li>Comfortable cushioning</li>
+                        <li>Durable construction</li>
+                        <li>Breathable design</li>
+                        <li>Stylish appearance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-header">
+            <h3 class="cart-title">Shopping Cart</h3>
+            <button class="close-cart" id="close-cart">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-bag" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        <div class="cart-total" id="cart-total" style="display: none;">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">₹0</span>
+            </div>
+            <div class="total-row">
+                <span>Total:</span>
+                <span class="total-amount" id="total-amount">₹0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <!-- Image Zoom Modal -->
+    <div class="zoom-modal" id="zoom-modal">
+        <div class="zoom-image">
+            <img src="" alt="Zoomed Image" id="zoomed-image">
+        </div>
+        <button class="zoom-close" id="zoom-close">&times;</button>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+        const productName = urlParams.get('name');
+        const productPrice = urlParams.get('price');
+        const productCategory = urlParams.get('category');
+        const productColor = urlParams.get('color') || 'white';
+
+        // Update product details based on URL parameters
+        if (productName) {
+            document.getElementById('product-title').textContent = productName;
+        }
+        if (productPrice) {
+            document.getElementById('product-price').textContent = productPrice;
+        }
+        if (productCategory) {
+            document.getElementById('product-category').textContent = productCategory;
+        }
+
+        // Update main shoe color and image
+        const mainShoe = document.getElementById('main-shoe');
+        const mainImage = document.getElementById('main-product-image');
+        
+        // Set the main shoe class
+        mainShoe.className = `product-shoe shoe-${productColor}`;
+        
+        // Map product IDs to specific images for better control
+        const productImageMap = {
+            '1': 'images/white-sneaker.jpg',      // White Sneaker
+            '2': 'images/black-sneaker.jpg',      // Black Sneaker
+            '3': 'images/dark-sneaker.jpg',       // Dark Sneaker
+            '4': 'images/air-classic-sneaker.jpg', // Air Classic Sneaker
+            '5': 'images/ultra-boost-sneaker.jpg', // Ultra Boost Sneaker
+            '6': 'images/classic-sneaker.jpg',    // Classic Sneaker
+            '8': 'images/elite-sneaker.jpg',      // Elite Sneaker
+            '9': 'images/pure-sneaker.jpg',       // Pure Sneaker
+            '11': 'images/running-sneaker.jpg'    // Running Sneaker
+        };
+        
+        // Try to load the specific product image first, then fallback to color-based
+        let imagePath = productImageMap[productId];
+        
+        if (!imagePath) {
+            // Fallback to color-based mapping
+            const colorImageMap = {
+                'white': 'images/white-sneaker.jpg',
+                'black': 'images/black-sneaker.jpg',
+                'pink': 'images/pink-sneaker.jpg',
+                'blue': 'images/blue-sneaker.jpg'
+            };
+            imagePath = colorImageMap[productColor] || 'images/white-sneaker.jpg';
+        }
+        
+        console.log('Loading image for product:', productId, 'color:', productColor, 'path:', imagePath);
+        
+        // Debug function to check what's happening
+        function debugImageLoading() {
+            console.log('=== DEBUG INFO ===');
+            console.log('Product ID:', productId);
+            console.log('Product Name:', productName);
+            console.log('Product Price:', productPrice);
+            console.log('Product Category:', productCategory);
+            console.log('Product Color:', productColor);
+            console.log('Main Image Element:', mainImage);
+            console.log('Main Shoe Element:', mainShoe);
+            console.log('Image Path:', imagePath);
+            console.log('==================');
+        }
+
+        // Call debug function
+        debugImageLoading();
+        
+        if (mainImage) {
+            mainImage.src = imagePath;
+            mainImage.onload = function() {
+                // Image loaded successfully
+                mainImage.style.display = 'block';
+                mainShoe.style.display = 'none';
+                console.log('Image loaded successfully:', imagePath);
+            };
+            mainImage.onerror = function() {
+                // Image failed to load, show CSS shape
+                mainImage.style.display = 'none';
+                mainShoe.style.display = 'block';
+                console.log('Image failed to load, showing CSS shape:', imagePath);
+            };
+        }
+
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let selectedSize = null;
+        let quantity = 1;
+
+        // Update cart count
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fas fa-shopping-bag" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p>Your cart is empty</p>
+                    </div>
+                `;
+                cartTotal.style.display = 'none';
+            } else {
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <div class="cart-item-image">
+                            <div class="product-shoe shoe-${item.color}" style="width: 100%; height: 100%; transform: none;"></div>
+                        </div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">${item.price} - Size ${item.size}</div>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="cart-quantity-btn" onclick="updateCartItemQuantity(${index}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="cart-quantity-btn" onclick="updateCartItemQuantity(${index}, 1)">+</button>
+                        </div>
+                        <button class="cart-quantity-btn" onclick="removeFromCart(${index})" style="background: #ff4444; color: white;">×</button>
+                    </div>
+                `).join('');
+                
+                const subtotal = cart.reduce((sum, item) => sum + (parseInt(item.price.replace(/[^\d]/g, '')) * item.quantity), 0);
+                document.getElementById('subtotal').textContent = `₹${subtotal.toLocaleString()}`;
+                document.getElementById('total-amount').textContent = `₹${subtotal.toLocaleString()}`;
+                cartTotal.style.display = 'block';
+            }
+        }
+
+        // Add to cart
+        function addToCart() {
+            if (!selectedSize) {
+                alert('Please select a size');
+                return;
+            }
+
+            const product = {
+                id: productId || Date.now(),
+                name: document.getElementById('product-title').textContent,
+                price: document.getElementById('product-price').textContent,
+                category: document.getElementById('product-category').textContent,
+                color: productColor,
+                size: selectedSize,
+                quantity: quantity
+            };
+
+            // Check if item already exists in cart
+            const existingItemIndex = cart.findIndex(item => 
+                item.id === product.id && item.size === product.size
+            );
+
+            if (existingItemIndex !== -1) {
+                cart[existingItemIndex].quantity += quantity;
+            } else {
+                cart.push(product);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartDisplay();
+            
+            // Show success message
+            const addToCartBtn = document.getElementById('add-to-cart');
+            const originalText = addToCartBtn.textContent;
+            addToCartBtn.textContent = 'Added!';
+            addToCartBtn.style.background = '#4CAF50';
+            
+            setTimeout(() => {
+                addToCartBtn.textContent = originalText;
+                addToCartBtn.style.background = '#000';
+            }, 2000);
+        }
+
+        // Update cart item quantity
+        function updateCartItemQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartDisplay();
+        }
+
+        // Remove from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            updateCartDisplay();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            updateCartDisplay();
+
+            // Size selection
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedSize = this.dataset.size;
+                });
+            });
+
+            // Quantity controls
+            document.getElementById('decrease-qty').addEventListener('click', function() {
+                if (quantity > 1) {
+                    quantity--;
+                    document.getElementById('quantity-input').value = quantity;
+                }
+            });
+
+            document.getElementById('increase-qty').addEventListener('click', function() {
+                if (quantity < 10) {
+                    quantity++;
+                    document.getElementById('quantity-input').value = quantity;
+                }
+            });
+
+            document.getElementById('quantity-input').addEventListener('change', function() {
+                quantity = parseInt(this.value) || 1;
+                if (quantity < 1) quantity = 1;
+                if (quantity > 10) quantity = 10;
+                this.value = quantity;
+            });
+
+            // Color thumbnails with improved switching
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.addEventListener('click', function() {
+                    // Remove active class from all thumbnails
+                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                    // Add active class to clicked thumbnail
+                    this.classList.add('active');
+                    
+                    const color = this.dataset.color;
+                    const mainShoe = document.getElementById('main-shoe');
+                    const mainImage = document.getElementById('main-product-image');
+                    
+                    // Update main shoe class
+                    mainShoe.className = `product-shoe shoe-${color}`;
+                    
+                    // Use color-based mapping for thumbnails
+                    const colorImageMap = {
+                        'white': 'images/white-sneaker.jpg',
+                        'black': 'images/black-sneaker.jpg',
+                        'pink': 'images/pink-sneaker.jpg',
+                        'blue': 'images/blue-sneaker.jpg'
+                    };
+                    
+                    const imagePath = colorImageMap[color] || 'images/white-sneaker.jpg';
+                    
+                    console.log('Switching to color:', color, 'image:', imagePath);
+                    
+                    // Update image with smooth transition
+                    if (mainImage) {
+                        // Add fade out effect
+                        mainImage.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            mainImage.src = imagePath;
+                            mainImage.style.opacity = '1';
+                            
+                            // Handle image load/error
+                            mainImage.onload = function() {
+                                mainImage.style.display = 'block';
+                                mainShoe.style.display = 'none';
+                                console.log('Thumbnail image loaded:', imagePath);
+                            };
+                            mainImage.onerror = function() {
+                                mainImage.style.display = 'none';
+                                mainShoe.style.display = 'block';
+                                console.log('Thumbnail image failed, showing CSS shape:', imagePath);
+                            };
+                        }, 150);
+                    }
+                    
+                    productColor = color;
+                });
+            });
+
+            // Main image click to zoom
+            document.getElementById('main-shoe').addEventListener('click', function() {
+                const mainImage = document.getElementById('main-product-image');
+                if (mainImage && mainImage.src) {
+                    document.getElementById('zoomed-image').src = mainImage.src;
+                    document.getElementById('zoom-modal').classList.add('active');
+                }
+            });
+
+            // Close zoom modal
+            document.getElementById('zoom-close').addEventListener('click', function() {
+                document.getElementById('zoom-modal').classList.remove('active');
+            });
+
+            // Close zoom modal when clicking outside
+            document.getElementById('zoom-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+
+            // Add to cart button
+            document.getElementById('add-to-cart').addEventListener('click', addToCart);
+
+            // Test image loading button
+            document.getElementById('test-image').addEventListener('click', function() {
+                const mainImage = document.getElementById('main-product-image');
+                const mainShoe = document.getElementById('main-shoe');
+                
+                console.log('=== TESTING IMAGE LOADING ===');
+                console.log('Main Image Element:', mainImage);
+                console.log('Main Image src:', mainImage ? mainImage.src : 'No element');
+                console.log('Main Image display:', mainImage ? mainImage.style.display : 'No element');
+                console.log('Main Shoe display:', mainShoe ? mainShoe.style.display : 'No element');
+                
+                // Try to force load a test image
+                if (mainImage) {
+                    mainImage.src = 'images/white-sneaker.jpg';
+                    mainImage.style.display = 'block';
+                    mainShoe.style.display = 'none';
+                    console.log('Forced image to display');
+                }
+            });
+
+            // Cart modal
+            document.getElementById('cart-icon').addEventListener('click', function() {
+                document.getElementById('cart-modal').classList.add('open');
+            });
+
+            document.getElementById('close-cart').addEventListener('click', function() {
+                document.getElementById('cart-modal').classList.remove('open');
+            });
+
+            // Close cart when clicking outside
+            document.addEventListener('click', function(e) {
+                const cartModal = document.getElementById('cart-modal');
+                const cartIcon = document.getElementById('cart-icon');
+                if (!cartModal.contains(e.target) && !cartIcon.contains(e.target)) {
+                    cartModal.classList.remove('open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
