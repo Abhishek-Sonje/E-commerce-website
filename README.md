@@ -37,13 +37,13 @@ php -S localhost:8000
 Sneaker Mania/
 ├── index.html              # Home page
 ├── detail.html             # Product detail page
-├── test-images.html        # Image testing page
 ├── images/                 # Product images
 │   ├── white-sneaker.jpg
 │   ├── black-sneaker.jpg
 │   └── ... (other images)
 ├── README.md               # This file
-└── IMAGE_SETUP_GUIDE.md    # Image setup instructions
+├── IMAGE_SETUP_GUIDE.md    # Image setup instructions
+└── DEPLOYMENT_CHECKLIST.md # Deployment checklist
 ```
 
 ## 🛠️ Features

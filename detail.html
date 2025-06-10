@@ -124,7 +124,7 @@
 
         .main-image {
             width: 100%;
-            height: 60px;
+            height: 600px;
             background: #f8f8f8;
             border-radius: 20px;
             display: flex;
@@ -721,7 +721,6 @@
                 <div class="action-buttons">
                     <button class="btn btn-primary" id="add-to-cart">Add to Cart</button>
                     <button class="btn btn-secondary" id="buy-now">Buy Now</button>
-                    <button class="btn btn-secondary" id="test-image" style="background: #ff6b35; margin-top: 1rem;">Test Image Loading</button>
                 </div>
 
                 <div class="product-features">
@@ -830,38 +829,17 @@
             imagePath = colorImageMap[productColor] || 'images/white-sneaker.jpg';
         }
         
-        console.log('Loading image for product:', productId, 'color:', productColor, 'path:', imagePath);
-        
-        // Debug function to check what's happening
-        function debugImageLoading() {
-            console.log('=== DEBUG INFO ===');
-            console.log('Product ID:', productId);
-            console.log('Product Name:', productName);
-            console.log('Product Price:', productPrice);
-            console.log('Product Category:', productCategory);
-            console.log('Product Color:', productColor);
-            console.log('Main Image Element:', mainImage);
-            console.log('Main Shoe Element:', mainShoe);
-            console.log('Image Path:', imagePath);
-            console.log('==================');
-        }
-
-        // Call debug function
-        debugImageLoading();
-        
         if (mainImage) {
             mainImage.src = imagePath;
             mainImage.onload = function() {
                 // Image loaded successfully
                 mainImage.style.display = 'block';
                 mainShoe.style.display = 'none';
-                console.log('Image loaded successfully:', imagePath);
             };
             mainImage.onerror = function() {
                 // Image failed to load, show CSS shape
                 mainImage.style.display = 'none';
                 mainShoe.style.display = 'block';
-                console.log('Image failed to load, showing CSS shape:', imagePath);
             };
         }
 
@@ -1040,9 +1018,6 @@
                     
                     const imagePath = colorImageMap[color] || 'images/white-sneaker.jpg';
                     
-                    console.log('Switching to color:', color, 'image:', imagePath);
-                    
-                    // Update image with smooth transition
                     if (mainImage) {
                         // Add fade out effect
                         mainImage.style.opacity = '0';
@@ -1055,12 +1030,10 @@
                             mainImage.onload = function() {
                                 mainImage.style.display = 'block';
                                 mainShoe.style.display = 'none';
-                                console.log('Thumbnail image loaded:', imagePath);
                             };
                             mainImage.onerror = function() {
                                 mainImage.style.display = 'none';
                                 mainShoe.style.display = 'block';
-                                console.log('Thumbnail image failed, showing CSS shape:', imagePath);
                             };
                         }, 150);
                     }
@@ -1092,26 +1065,6 @@
 
             // Add to cart button
             document.getElementById('add-to-cart').addEventListener('click', addToCart);
-
-            // Test image loading button
-            document.getElementById('test-image').addEventListener('click', function() {
-                const mainImage = document.getElementById('main-product-image');
-                const mainShoe = document.getElementById('main-shoe');
-                
-                console.log('=== TESTING IMAGE LOADING ===');
-                console.log('Main Image Element:', mainImage);
-                console.log('Main Image src:', mainImage ? mainImage.src : 'No element');
-                console.log('Main Image display:', mainImage ? mainImage.style.display : 'No element');
-                console.log('Main Shoe display:', mainShoe ? mainShoe.style.display : 'No element');
-                
-                // Try to force load a test image
-                if (mainImage) {
-                    mainImage.src = 'images/white-sneaker.jpg';
-                    mainImage.style.display = 'block';
-                    mainShoe.style.display = 'none';
-                    console.log('Forced image to display');
-                }
-            });
 
             // Cart modal
             document.getElementById('cart-icon').addEventListener('click', function() {
